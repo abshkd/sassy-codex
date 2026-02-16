@@ -43,8 +43,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid clerk signature' }, { status: 400 });
   }
 
-
-  const clerkEventId = typeof event.data.id === 'string' ? event.data.id : svixId;
+  const clerkEventId = svixId;
 
   try {
     await prisma.clerkEvent.create({
