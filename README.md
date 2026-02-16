@@ -2,8 +2,6 @@
 
 `create-saas-stack` is a local CLI generator in the `sassy-codex` repository that scaffolds a production-minded SaaS monorepo from the architecture in `Codex.md`.
 
-Repository: https://github.com/abshkd/sassy-codex
-
 It generates:
 - Next.js (App Router) web app
 - Node worker service with `pg-boss`
