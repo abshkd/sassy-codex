@@ -1,0 +1,12 @@
+{
+  "name": "@saas/db",
+  "private": true,
+  "main": "src/client.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "echo lint",
+    "test": "vitest run",
+    "prisma": "prisma",
+    "db:seed": "tsx prisma/seed.ts"
+  }
+}

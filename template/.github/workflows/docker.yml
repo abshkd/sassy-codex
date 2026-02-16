@@ -1,0 +1,9 @@
+name: Docker
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f apps/web/Dockerfile .
+      - run: docker build -f apps/worker/Dockerfile .

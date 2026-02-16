@@ -1,0 +1,16 @@
+{
+  "name": "__PROJECT_NAME__",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "worker": "pnpm --filter worker dev",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "e2e": "playwright test",
+    "db:migrate": "pnpm --filter @saas/db prisma migrate dev",
+    "db:seed": "pnpm --filter @saas/db db:seed",
+    "format": "prettier -w ."
+  }
+}

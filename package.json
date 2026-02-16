@@ -1,0 +1,18 @@
+{
+  "name": "create-saas-stack",
+  "version": "0.1.0",
+  "description": "npm create initializer for a production-oriented SaaS stack",
+  "type": "module",
+  "bin": {
+    "create-saas-stack": "src/cli.mjs"
+  },
+  "scripts": {
+    "typecheck": "node --check src/cli.mjs",
+    "lint": "node --check src/cli.mjs",
+    "test": "node --test",
+    "prepare": "chmod +x src/cli.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
