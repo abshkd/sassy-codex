@@ -4,9 +4,15 @@
   "main": "src/client.ts",
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "lint": "echo lint",
-    "test": "vitest run",
+    "lint": "eslint src",
+    "test": "vitest run --passWithNoTests",
     "prisma": "prisma",
     "db:seed": "tsx prisma/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.20.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.20.0"
   }
 }

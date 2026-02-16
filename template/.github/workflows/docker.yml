@@ -1,9 +1,20 @@
-name: Docker
-on: workflow_dispatch
+name: Docker (manual)
+
+on:
+  workflow_dispatch:
+
 jobs:
   build:
+    name: Manual Docker build smoke test
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+
     steps:
-      - uses: actions/checkout@v4
-      - run: docker build -f apps/web/Dockerfile .
-      - run: docker build -f apps/worker/Dockerfile .
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build web image
+        run: docker build -f apps/web/Dockerfile .
+
+      - name: Build worker image
+        run: docker build -f apps/worker/Dockerfile .
