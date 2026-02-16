@@ -1,7 +1,7 @@
 {
-  "name": "create-saas-stack",
+  "name": "@justlab/create-saas-stack",
   "version": "0.1.0",
-  "description": "npm create initializer for a production-oriented SaaS stack",
+  "description": "Codex agent-ready production SaaS app generator.",
   "type": "module",
   "bin": {
     "create-saas-stack": "src/cli.mjs"
@@ -14,5 +14,32 @@
   },
   "engines": {
     "node": ">=24"
-  }
+  },
+  "keywords": [
+    "create",
+    "initializer",
+    "saas",
+    "nextjs",
+    "clerk",
+    "stripe",
+    "supabase"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abshkd/sassy-codex.git"
+  },
+  "homepage": "https://github.com/abshkd/sassy-codex#readme",
+  "bugs": {
+    "url": "https://github.com/abshkd/sassy-codex/issues"
+  },
+  "files": [
+    "src",
+    "template",
+    "LICENSE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "AGPL-3.0-only"
 }
