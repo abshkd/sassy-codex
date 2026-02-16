@@ -25,6 +25,9 @@ This document defines the **single, opinionated architecture** and the **generat
 - [x] Full runtime integration hardening for Clerk/Stripe/Loops/Supabase production behavior
 - [x] End-to-end quality gate verification (`pnpm typecheck`, `pnpm lint`, `pnpm test`, docker builds in generated repo)
 
+### Overall status
+- [x] Generator implementation complete (all defined phases done)
+
 ## Goal
 
 Build an **npm create initializer** that outputs a **production-oriented SaaS starter**.
