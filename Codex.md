@@ -23,7 +23,7 @@ This document defines the **single, opinionated architecture** and the **generat
 ### Phase 3 — Validation and hardening
 - [x] Verify generator runs and scaffolds a usable repo iteratively
 - [x] Full runtime integration hardening for Clerk/Stripe/Loops/Supabase production behavior
-- [ ] End-to-end quality gate verification (`pnpm typecheck`, `pnpm lint`, `pnpm test`, docker builds in generated repo)
+- [x] End-to-end quality gate verification (`pnpm typecheck`, `pnpm lint`, `pnpm test`, docker builds in generated repo)
 
 ## Goal
 

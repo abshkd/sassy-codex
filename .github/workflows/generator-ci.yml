@@ -1,0 +1,82 @@
+name: Generator CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: generator-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  generator:
+    name: Generator checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install generator dependencies
+        run: npm install
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm test
+
+  generated-template:
+    name: Generated repo quality gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: generator
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.13.1
+
+      - name: Scaffold generated repo
+        run: node src/cli.mjs .tmpgen --yes
+
+      - name: Run generated typecheck
+        working-directory: .tmpgen
+        run: pnpm typecheck
+
+      - name: Run generated lint
+        working-directory: .tmpgen
+        run: pnpm lint
+
+      - name: Run generated tests
+        working-directory: .tmpgen
+        run: pnpm test
+
+      - name: Build generated web Docker image
+        working-directory: .tmpgen
+        run: pnpm docker:build:web
+
+      - name: Build generated worker Docker image
+        working-directory: .tmpgen
+        run: pnpm docker:build:worker
