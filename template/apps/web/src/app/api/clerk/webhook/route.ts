@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { Webhook } from 'svix';
 import type { WebhookEvent } from '@clerk/nextjs/server';
 import { env } from '../../../../lib/env';
@@ -40,6 +41,22 @@ export async function POST(req: Request) {
     }) as WebhookEvent;
   } catch {
     return NextResponse.json({ error: 'Invalid clerk signature' }, { status: 400 });
+  }
+
+
+  try {
+    await prisma.clerkEvent.create({
+      data: {
+        clerkEventId: event.data.id,
+        type: event.type,
+      },
+    });
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      return NextResponse.json({ synced: true, duplicate: true });
+    }
+
+    throw error;
   }
 
   switch (event.type) {
