@@ -8,6 +8,23 @@ This document defines the **single, opinionated architecture** and the **generat
 
 ---
 
+## Implementation Progress
+
+### Phase 1 — Generator CLI
+- [x] Create `create-saas-stack` package and `create-saas-stack` bin entry
+- [x] Implement minimal prompts and flags (`--orgs`, `--billing`, `--loops`, `--storage`)
+- [x] Copy template, replace placeholders, and run `pnpm install`
+
+### Phase 2 — Canonical template scaffold
+- [x] Generate required monorepo layout (`apps`, `packages`, `infra`, `.github`)
+- [x] Generate required baseline files for web, worker, db, shared, docker, and CI
+- [x] Include env examples, root scripts, and generated repo AGENTS.md
+
+### Phase 3 — Validation and hardening
+- [x] Verify generator runs and scaffolds a usable repo iteratively
+- [ ] Full runtime integration hardening for Clerk/Stripe/Loops/Supabase production behavior
+- [ ] End-to-end quality gate verification (`pnpm typecheck`, `pnpm lint`, `pnpm test`, docker builds in generated repo)
+
 ## Goal
 
 Build an **npm create initializer** that outputs a **production-oriented SaaS starter**.
