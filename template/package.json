@@ -11,6 +11,16 @@
     "e2e": "playwright test",
     "db:migrate": "pnpm --filter @saas/db prisma migrate dev",
     "db:seed": "pnpm --filter @saas/db db:seed",
-    "format": "prettier -w ."
+    "format": "prettier -w .",
+    "docker:build:web": "docker build -f apps/web/Dockerfile .",
+    "docker:build:worker": "docker build -f apps/worker/Dockerfile ."
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.0.0"
   }
 }

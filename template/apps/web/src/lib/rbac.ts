@@ -1,2 +1,13 @@
-export type OrgRole = 'owner'|'admin'|'member';
-export function ensureRole(current: OrgRole, required: OrgRole) { const order = { member:1, admin:2, owner:3 } as const; if (order[current] < order[required]) throw new Error('forbidden'); }
+export type OrgRole = 'owner' | 'admin' | 'member';
+
+const roleOrder: Record<OrgRole, number> = {
+  member: 1,
+  admin: 2,
+  owner: 3,
+};
+
+export function ensureRole(current: OrgRole, required: OrgRole) {
+  if (roleOrder[current] < roleOrder[required]) {
+    throw new Error('forbidden');
+  }
+}
