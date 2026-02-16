@@ -45,6 +45,8 @@ export async function POST(req: Request) {
 
   const clerkEventId = svixId;
 
+  let duplicate = false;
+
   try {
     await prisma.clerkEvent.create({
       data: {
@@ -54,10 +56,10 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      return NextResponse.json({ synced: true, duplicate: true });
+      duplicate = true;
+    } else {
+      throw error;
     }
-
-    throw error;
   }
 
   switch (event.type) {
@@ -138,5 +140,5 @@ export async function POST(req: Request) {
       break;
   }
 
-  return NextResponse.json({ synced: true });
+  return NextResponse.json({ synced: true, duplicate });
 }

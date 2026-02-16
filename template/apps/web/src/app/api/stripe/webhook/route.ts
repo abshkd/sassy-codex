@@ -22,6 +22,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Invalid stripe signature' }, { status: 400 });
   }
 
+  let duplicate = false;
+
   try {
     await prisma.stripeEvent.create({
       data: {
@@ -31,10 +33,10 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-      return NextResponse.json({ received: true, duplicate: true });
+      duplicate = true;
+    } else {
+      throw error;
     }
-
-    throw error;
   }
 
   const boss = await getBoss();
@@ -44,5 +46,5 @@ export async function POST(request: Request) {
     { singletonKey: `stripe:${event.id}` },
   );
 
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ received: true, duplicate });
 }
