@@ -1,10 +1,84 @@
-generator client { provider = "prisma-client-js" }
-datasource db { provider = "postgresql"; url = env("DATABASE_URL") }
+generator client {
+  provider = "prisma-client-js"
+}
 
-model User { id String @id @default(uuid()) clerkUserId String @unique email String name String? createdAt DateTime @default(now()) orgMembers OrgMember[] subscriptions Subscription[] }
-model Org { id String @id @default(uuid()) clerkOrgId String @unique name String slug String @unique createdAt DateTime @default(now()) members OrgMember[] subscriptions Subscription[] }
-model OrgMember { id String @id @default(uuid()) orgId String userId String clerkOrgMembershipId String @unique role String org Org @relation(fields:[orgId], references:[id]) user User @relation(fields:[userId], references:[id]) @@unique([orgId,userId]) }
-model Subscription { id String @id @default(uuid()) scope String orgId String? userId String? stripeCustomerId String? @unique stripeSubscriptionId String? @unique status String plan String currentPeriodEnd DateTime? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt org Org? @relation(fields:[orgId], references:[id]) user User? @relation(fields:[userId], references:[id]) }
-model StripeEvent { id String @id @default(uuid()) stripeEventId String @unique type String createdAt DateTime @default(now()) }
-model ClerkEvent { id String @id @default(uuid()) clerkEventId String @unique type String createdAt DateTime @default(now()) }
-model EmailEvent { id String @id @default(uuid()) eventName String scope String orgId String? userId String? payloadJson Json status String attempts Int @default(0) lastError String? createdAt DateTime @default(now()) updatedAt DateTime @updatedAt }
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String         @id @default(uuid())
+  clerkUserId  String         @unique
+  email        String
+  name         String?
+  createdAt    DateTime       @default(now())
+  orgMembers   OrgMember[]
+  subscriptions Subscription[]
+}
+
+model Org {
+  id            String         @id @default(uuid())
+  clerkOrgId    String         @unique
+  name          String
+  slug          String         @unique
+  createdAt     DateTime       @default(now())
+  members       OrgMember[]
+  subscriptions Subscription[]
+}
+
+model OrgMember {
+  id                    String @id @default(uuid())
+  orgId                 String
+  userId                String
+  clerkOrgMembershipId  String @unique
+  role                  String
+  org                   Org    @relation(fields: [orgId], references: [id])
+  user                  User   @relation(fields: [userId], references: [id])
+
+  @@unique([orgId, userId])
+}
+
+model Subscription {
+  id                   String   @id @default(uuid())
+  scope                String
+  orgId                String?
+  userId               String?
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?  @unique
+  status               String
+  plan                 String
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  org                  Org?     @relation(fields: [orgId], references: [id])
+  user                 User?    @relation(fields: [userId], references: [id])
+}
+
+model StripeEvent {
+  id            String   @id @default(uuid())
+  stripeEventId String   @unique
+  type          String
+  createdAt     DateTime @default(now())
+}
+
+model ClerkEvent {
+  id           String   @id @default(uuid())
+  clerkEventId String   @unique
+  type         String
+  createdAt    DateTime @default(now())
+}
+
+model EmailEvent {
+  id         String   @id @default(uuid())
+  eventName  String
+  scope      String
+  orgId      String?
+  userId     String?
+  payloadJson Json
+  status     String
+  attempts   Int      @default(0)
+  lastError  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

@@ -13,7 +13,8 @@
     "db:seed": "pnpm --filter @saas/db db:seed",
     "format": "prettier -w .",
     "docker:build:web": "docker build -f apps/web/Dockerfile .",
-    "docker:build:worker": "docker build -f apps/worker/Dockerfile ."
+    "docker:build:worker": "docker build -f apps/worker/Dockerfile .",
+    "postinstall": "pnpm --filter @saas/db prisma generate"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",

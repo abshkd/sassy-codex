@@ -44,10 +44,12 @@ export async function POST(req: Request) {
   }
 
 
+  const clerkEventId = typeof event.data.id === 'string' ? event.data.id : svixId;
+
   try {
     await prisma.clerkEvent.create({
       data: {
-        clerkEventId: event.data.id,
+        clerkEventId,
         type: event.type,
       },
     });
