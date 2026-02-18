@@ -1,6 +1,6 @@
 {
   "name": "@justlab/create-saas-stack",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Codex agent-ready production SaaS app generator.",
   "type": "module",
   "bin": {
