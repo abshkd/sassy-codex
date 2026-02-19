@@ -29,6 +29,7 @@ export async function POST(request: Request) {
       data: {
         stripeEventId: event.id,
         type: event.type,
+        payloadJson: event as unknown as Prisma.InputJsonValue,
       },
     });
   } catch (error) {
@@ -39,12 +40,10 @@ export async function POST(request: Request) {
     }
   }
 
-  const boss = await getBoss();
-  await boss.send(
-    'stripe.process_event',
-    { stripeEventId: event.id },
-    { singletonKey: `stripe:${event.id}` },
-  );
+  if (!duplicate) {
+    const boss = await getBoss();
+    await boss.send('stripe.process_event', { stripeEventId: event.id }, { singletonKey: `stripe:${event.id}` });
+  }
 
   return NextResponse.json({ received: true, duplicate });
 }
