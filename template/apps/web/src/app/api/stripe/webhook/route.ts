@@ -23,28 +23,33 @@ export async function POST(request: Request) {
   }
 
   let duplicate = false;
+  let shouldEnqueue = true;
 
   try {
     await prisma.stripeEvent.create({
       data: {
         stripeEventId: event.id,
         type: event.type,
+        payloadJson: event as unknown as Prisma.InputJsonValue,
       },
     });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
       duplicate = true;
+      const existingEvent = await prisma.stripeEvent.findUnique({
+        where: { stripeEventId: event.id },
+        select: { processedAt: true },
+      });
+      shouldEnqueue = !existingEvent?.processedAt;
     } else {
       throw error;
     }
   }
 
-  const boss = await getBoss();
-  await boss.send(
-    'stripe.process_event',
-    { stripeEventId: event.id },
-    { singletonKey: `stripe:${event.id}` },
-  );
+  if (shouldEnqueue) {
+    const boss = await getBoss();
+    await boss.send('stripe.process_event', { stripeEventId: event.id }, { singletonKey: `stripe:${event.id}` });
+  }
 
   return NextResponse.json({ received: true, duplicate });
 }
