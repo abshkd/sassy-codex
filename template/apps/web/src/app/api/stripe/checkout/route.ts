@@ -1,7 +1,9 @@
+import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { checkoutRequestSchema } from '@saas/shared';
 import { env } from '../../../../lib/env';
+import { prisma } from '../../../../lib/db';
 
 const stripe = new Stripe(env.STRIPE_SECRET_KEY);
 
@@ -19,12 +21,45 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Billing is disabled by configuration' }, { status: 412 });
   }
 
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const parsed = checkoutRequestSchema.safeParse(await request.json());
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
   const { orgSlug, scope } = parsed.data;
+
+  if (scope === 'org') {
+    if (!orgSlug) {
+      return NextResponse.json({ error: 'orgSlug is required for org scope checkouts' }, { status: 400 });
+    }
+
+    const membership = await prisma.orgMember.findFirst({
+      where: {
+        user: { clerkUserId: userId },
+        org: { slug: orgSlug },
+      },
+      select: { id: true },
+    });
+
+    if (!membership) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+  } else {
+    const user = await prisma.user.findUnique({
+      where: { clerkUserId: userId },
+      select: { id: true },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+  }
+
   const isPlanCheckout = Boolean(parsed.data.planCode);
 
   if (isPlanCheckout && parsed.data.planCode === 'FREE') {
